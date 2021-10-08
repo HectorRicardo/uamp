@@ -28,10 +28,6 @@
         android:targetSandboxVersion="2"
         android:theme="@style/AppTheme">
 
-        <!-- Declare that UAMP supports Cast. -->
-        <meta-data android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
-            android:value="com.example.android.uamp.cast.UampCastOptionsProvider"/>
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
