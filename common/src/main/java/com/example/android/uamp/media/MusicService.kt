@@ -629,13 +629,13 @@ open class MusicService : MediaBrowserServiceCompat() {
         }
 
         override fun onPlayerError(error: ExoPlaybackException) {
-            var message = R.string.generic_error;
+            var message = R.string.generic_error
             when (error.type) {
                 // If the data from MediaSource object could not be loaded the Exoplayer raises
                 // a type_source error.
                 // An error message is printed to UI via Toast message to inform the user.
                 ExoPlaybackException.TYPE_SOURCE -> {
-                    message = R.string.error_media_not_found;
+                    message = R.string.error_media_not_found
                     Log.e(TAG, "TYPE_SOURCE: " + error.sourceException.message)
                 }
                 // If the error occurs in a render component, Exoplayer raises a type_remote error.
