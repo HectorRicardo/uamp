@@ -16,7 +16,6 @@
 
 package com.example.android.uamp.media
 
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
@@ -47,12 +46,9 @@ class UampNotificationManager(
     notificationListener: PlayerNotificationManager.NotificationListener
 ) {
 
-    private var player: Player? = null
     private val serviceJob = SupervisorJob()
     private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
     private val notificationManager: PlayerNotificationManager
-    private val platformNotificationManager: NotificationManager =
-        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     init {
         val mediaController = MediaControllerCompat(context, sessionToken)
@@ -139,5 +135,3 @@ const val NOTIFICATION_LARGE_ICON_SIZE = 144 // px
 private val glideOptions = RequestOptions()
     .fallback(R.drawable.default_art)
     .diskCacheStrategy(DiskCacheStrategy.DATA)
-
-private const val MODE_READ_ONLY = "r"
