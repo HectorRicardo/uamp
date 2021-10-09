@@ -28,7 +28,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.android.uamp.MainActivity
 import com.example.android.uamp.MediaItemData
 import com.example.android.uamp.common.MusicServiceConnection
-import com.example.android.uamp.fragments.NowPlayingFragment
 import com.example.android.uamp.media.extensions.id
 import com.example.android.uamp.media.extensions.isPlayEnabled
 import com.example.android.uamp.media.extensions.isPlaying
@@ -81,7 +80,6 @@ class MainActivityViewModel(
             browseToItem(clickedItem)
         } else {
             playMedia(clickedItem, pauseAllowed = false)
-            showFragment(NowPlayingFragment.newInstance())
         }
     }
 
@@ -133,29 +131,6 @@ class MainActivityViewModel(
             }
         } else {
             transportControls.playFromMediaId(mediaItem.mediaId, null)
-        }
-    }
-
-    fun playMediaId(mediaId: String) {
-        val nowPlaying = musicServiceConnection.nowPlaying.value
-        val transportControls = musicServiceConnection.transportControls
-
-        val isPrepared = musicServiceConnection.playbackState.value?.isPrepared ?: false
-        if (isPrepared && mediaId == nowPlaying?.id) {
-            musicServiceConnection.playbackState.value?.let { playbackState ->
-                when {
-                    playbackState.isPlaying -> transportControls.pause()
-                    playbackState.isPlayEnabled -> transportControls.play()
-                    else -> {
-                        Log.w(
-                            TAG, "Playable item clicked but neither play nor pause are enabled!" +
-                                    " (mediaId=$mediaId)"
-                        )
-                    }
-                }
-            }
-        } else {
-            transportControls.playFromMediaId(mediaId, null)
         }
     }
 

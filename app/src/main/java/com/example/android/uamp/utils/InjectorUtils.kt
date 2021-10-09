@@ -16,14 +16,12 @@
 
 package com.example.android.uamp.utils
 
-import android.app.Application
 import android.content.ComponentName
 import android.content.Context
 import com.example.android.uamp.common.MusicServiceConnection
 import com.example.android.uamp.media.MusicService
 import com.example.android.uamp.viewmodels.MainActivityViewModel
 import com.example.android.uamp.viewmodels.MediaItemFragmentViewModel
-import com.example.android.uamp.viewmodels.NowPlayingFragmentViewModel
 
 /**
  * Static methods used to inject classes needed for various Activities and Fragments.
@@ -47,14 +45,5 @@ object InjectorUtils {
         val applicationContext = context.applicationContext
         val musicServiceConnection = provideMusicServiceConnection(applicationContext)
         return MediaItemFragmentViewModel.Factory(mediaId, musicServiceConnection)
-    }
-
-    fun provideNowPlayingFragmentViewModel(context: Context)
-            : NowPlayingFragmentViewModel.Factory {
-        val applicationContext = context.applicationContext
-        val musicServiceConnection = provideMusicServiceConnection(applicationContext)
-        return NowPlayingFragmentViewModel.Factory(
-            applicationContext as Application, musicServiceConnection
-        )
     }
 }
