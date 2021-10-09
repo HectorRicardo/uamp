@@ -326,30 +326,6 @@ open class MusicService : MediaBrowserServiceCompat() {
     }
 
     /**
-     * Returns a list of [MediaItem]s that match the given search query
-     */
-    override fun onSearch(
-        query: String,
-        extras: Bundle?,
-        result: Result<List<MediaItem>>
-    ) {
-
-        val resultsSent = mediaSource.whenReady { successfullyInitialized ->
-            if (successfullyInitialized) {
-                val resultsList = mediaSource.search(query, extras ?: Bundle.EMPTY)
-                    .map { mediaMetadata ->
-                        MediaItem(mediaMetadata.description, mediaMetadata.flag)
-                    }
-                result.sendResult(resultsList)
-            }
-        }
-
-        if (!resultsSent) {
-            result.detach()
-        }
-    }
-
-    /**
      * Load the supplied list of songs and the song to play into the current player.
      */
     private fun preparePlaylist(
@@ -478,19 +454,7 @@ open class MusicService : MediaBrowserServiceCompat() {
          *
          * For details on how search is handled, see [AbstractMusicSource.search].
          */
-        override fun onPrepareFromSearch(query: String, playWhenReady: Boolean, extras: Bundle?) {
-            mediaSource.whenReady {
-                val metadataList = mediaSource.search(query, extras ?: Bundle.EMPTY)
-                if (metadataList.isNotEmpty()) {
-                    preparePlaylist(
-                        metadataList,
-                        metadataList[0],
-                        playWhenReady,
-                        playbackStartPositionMs = C.TIME_UNSET
-                    )
-                }
-            }
-        }
+        override fun onPrepareFromSearch(query: String, playWhenReady: Boolean, extras: Bundle?) = Unit
 
         override fun onPrepareFromUri(uri: Uri, playWhenReady: Boolean, extras: Bundle?) = Unit
 
