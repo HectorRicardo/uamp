@@ -61,7 +61,6 @@ public class MediaNotificationManager extends BroadcastReceiver {
     public static final String ACTION_PREV = "com.example.android.uamp.prev";
     public static final String ACTION_NEXT = "com.example.android.uamp.next";
     public static final String ACTION_STOP = "com.example.android.uamp.stop";
-    public static final String ACTION_STOP_CASTING = "com.example.android.uamp.stop_cast";
 
     private final MusicService mService;
     private MediaSessionCompat.Token mSessionToken;
@@ -78,8 +77,6 @@ public class MediaNotificationManager extends BroadcastReceiver {
     private final PendingIntent mPreviousIntent;
     private final PendingIntent mNextIntent;
     private final PendingIntent mStopIntent;
-
-    private final PendingIntent mStopCastIntent;
 
     private final int mNotificationColor;
 
@@ -105,9 +102,6 @@ public class MediaNotificationManager extends BroadcastReceiver {
                 new Intent(ACTION_NEXT).setPackage(pkg), PendingIntent.FLAG_CANCEL_CURRENT);
         mStopIntent = PendingIntent.getBroadcast(mService, REQUEST_CODE,
                 new Intent(ACTION_STOP).setPackage(pkg), PendingIntent.FLAG_CANCEL_CURRENT);
-        mStopCastIntent = PendingIntent.getBroadcast(mService, REQUEST_CODE,
-                new Intent(ACTION_STOP_CASTING).setPackage(pkg),
-                PendingIntent.FLAG_CANCEL_CURRENT);
 
         // Cancel all notifications to handle the case where the Service was killed and
         // restarted by the system.
@@ -133,7 +127,6 @@ public class MediaNotificationManager extends BroadcastReceiver {
                 filter.addAction(ACTION_PAUSE);
                 filter.addAction(ACTION_PLAY);
                 filter.addAction(ACTION_PREV);
-                filter.addAction(ACTION_STOP_CASTING);
                 mService.registerReceiver(this, filter);
 
                 mService.startForeground(NOTIFICATION_ID, notification);
@@ -176,12 +169,6 @@ public class MediaNotificationManager extends BroadcastReceiver {
                 break;
             case ACTION_PREV:
                 mTransportControls.skipToPrevious();
-                break;
-            case ACTION_STOP_CASTING:
-                Intent i = new Intent(context, MusicService.class);
-                i.setAction(MusicService.ACTION_CMD);
-                i.putExtra(MusicService.CMD_NAME, MusicService.CMD_STOP_CASTING);
-                mService.startService(i);
                 break;
             default:
                 LogHelper.w(TAG, "Unknown intent ignored. Action=", action);
@@ -309,17 +296,6 @@ public class MediaNotificationManager extends BroadcastReceiver {
                 .setContentTitle(description.getTitle())
                 .setContentText(description.getSubtitle())
                 .setLargeIcon(art);
-
-        if (mController != null && mController.getExtras() != null) {
-            String castName = mController.getExtras().getString(MusicService.EXTRA_CONNECTED_CAST);
-            if (castName != null) {
-                String castInfo = mService.getResources()
-                        .getString(R.string.casting_to_device, castName);
-                notificationBuilder.setSubText(castInfo);
-                notificationBuilder.addAction(R.drawable.ic_close_black_24dp,
-                        mService.getString(R.string.stop_casting), mStopCastIntent);
-            }
-        }
 
         setNotificationPlaybackState(notificationBuilder);
         if (fetchArtUrl != null) {
