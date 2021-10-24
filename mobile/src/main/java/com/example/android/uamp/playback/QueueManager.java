@@ -155,13 +155,6 @@ public class QueueManager {
         return mPlayingQueue.get(mCurrentIndex);
     }
 
-    public int getCurrentQueueSize() {
-        if (mPlayingQueue == null) {
-            return 0;
-        }
-        return mPlayingQueue.size();
-    }
-
     protected void setCurrentQueue(String title, List<MediaSessionCompat.QueueItem> newQueue) {
         setCurrentQueue(title, newQueue, null);
     }
